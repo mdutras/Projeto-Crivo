@@ -1,8 +1,9 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<time.h>
 #include "tools.h"
 
-#define NUM_ELEMS 200
+#define NUM_ELEMS 100000
 
 void crivo(int inicio, int fim, int *n){
     int multiples[] = {2,3,5,7};
@@ -17,6 +18,8 @@ void crivo(int inicio, int fim, int *n){
 }
 
 int main(){
+    clock_t t1, t2;
+    t1 = clock();
     int *b = (int*) malloc(sizeof(int) * NUM_ELEMS);
     crivo(1, NUM_ELEMS, b);
     int size = tam(NUM_ELEMS);
@@ -31,6 +34,8 @@ int main(){
         }
     }
     printf("\n");
+    t2 = clock() - t1;
+    printf("O programa demorou %.2f segundos\n", ((float)t2)/CLOCKS_PER_SEC);
     return 0;
 
 }
