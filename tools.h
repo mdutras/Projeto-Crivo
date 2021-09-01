@@ -5,3 +5,5 @@ int tam(int num);
 void red(int c, int num);
 
 void green(int c, int num);
+
+void cyan(int c, int num);

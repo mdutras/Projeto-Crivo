@@ -29,3 +29,10 @@ void green(int c, int num){
     printf("%d ", c); 
     printf("\033[0m");
 }
+
+void cyan(int c, int num){
+    spaces(num - tam(c));
+    printf("\033[0;36m");
+    printf("%d ", c); 
+    printf("\033[0m");
+}

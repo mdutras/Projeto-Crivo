@@ -1,50 +1,61 @@
+//gcc -fopenmp -o thread thread.c tools.c
+
 #include<stdio.h>
 #include<stdlib.h>
+#include<time.h>
 #include<omp.h>
 #include "tools.h"
 
-#define NUM_ELEMS 100
+#define NUM_ELEMS 10000000
 #define NUM_THREADS 4
 
-void crivo(int inicio, int fim, int *n){
-    int multiples[] = {2,3,5,7};
-    #pragma omp parallel for
-    for(int i = 0; i < (fim - inicio) ; i++){
-        n[i + inicio] = 1;
-        #pragma omp parallel for
-        for(int j = 0; j < 4; j++){
-            if(((inicio + i) != multiples[j]) & ((inicio + i) % multiples[j] == 0)){
-                n[i + inicio] = 0;
-            }
-        }
+void crivo(int inicio, int fim, int num,short* n)
+{
+    // int start = 0;
+    // if(inicio % num == 0){
+    //     start = inicio;
+    // }else{
+    //     start = (inicio + num) - (inicio % num);
+    // }
+    #pragma omp parallel num_threads(NUM_THREADS)
+    for(int j = 2; num * j <= NUM_ELEMS; j++){
+        n[(num * j) - 1] = 0;
     }
 
 }
 
 int main(){
-    int *nums = (int*) malloc(sizeof(int) * NUM_ELEMS);
-    for(int i  = 0; i < NUM_ELEMS ; i++){
-        nums[i] = 0;
+    struct timespec start, end;
+    clock_gettime(CLOCK_MONOTONIC_RAW, &start);
+    short *nums = (short*) malloc(sizeof(short) * NUM_ELEMS);
+    for(int i = 0; i <= NUM_ELEMS; i++){
+        nums[i] = 1; 
     }
-    int fraction = abs(NUM_ELEMS/NUM_THREADS);
+    int mult[] = {2,3,5,7}; 
     #pragma omp parallel num_threads(NUM_THREADS)
     {
-        int inicio = (omp_get_thread_num() == 0 ? 1 : fraction * omp_get_thread_num());
-        int fim = (omp_get_thread_num() == NUM_THREADS - 1 ? NUM_ELEMS + 1 : fraction * (omp_get_thread_num() + 1));
-        printf("fim (%d) - inicio (%d) = %d\n", fim, inicio, fim - inicio);
-        crivo(inicio, fim, nums);
+        crivo(1, NUM_ELEMS, mult[omp_get_thread_num()], nums);
     }
-    int size = tam(NUM_ELEMS);
-    for(int i  = 1; i <= NUM_ELEMS ; i++){
-        if(nums[i]){
-            green(i, size);
-        }else{
-            red(i, size);
+    int prime_counter = 0;
+    for (int i = 0, j = 1; i < NUM_ELEMS; i++)
+    {
+        if (nums[i])
+        {
+            cyan(i + 1, tam(NUM_ELEMS));
+            prime_counter++;
+            j++;
         }
-        if(i % 10 == 0){
+        if (j > 10)
+        {
             printf("\n");
+            j = 1;
         }
     }
     printf("\n");
+    free(nums);
+    printf("Há %d primos entre 1 e %d\n", prime_counter, NUM_ELEMS);
+    clock_gettime(CLOCK_MONOTONIC_RAW, &end);
+    float delta_us = (end.tv_sec - start.tv_sec) * 1000 + (end.tv_nsec - start.tv_nsec) / 1000000;
+    printf("O programa demorou %.2f milissegundos\n", delta_us);
     return 0;
 }
