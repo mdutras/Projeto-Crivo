@@ -14,7 +14,6 @@ int main(int argc, char **argv)
     for(int i = 0; i < NUM_ELEMS; i++){
         b[i] = 1; 
     }
-    double inicio, fim;
     int rank, counter = 2;
     struct timespec start, end;
     int mult[2][2] = {{2, 3}, {5, 7}};
@@ -25,7 +24,6 @@ int main(int argc, char **argv)
     
     for(int i = 1; counter > 0; i++){
         for(int j = 0; j < counter; j++){
-            // printf("rank %d b[%d]\n", rank, (mult[rank][0] + i * mult[rank][0]) - 1);
             if((mult[rank][j] + i * mult[rank][j]) > NUM_ELEMS){
                 counter--;
             }else{
@@ -56,7 +54,6 @@ int main(int argc, char **argv)
         free(n);
         printf("\n");
         printf("Há %d primos entre 1 e %d\n", prime_counter, NUM_ELEMS);
-        fim = MPI_Wtime();
         clock_gettime(CLOCK_MONOTONIC_RAW, &end);
         float delta_us = (end.tv_sec - start.tv_sec) * 1000 + (end.tv_nsec - start.tv_nsec) / 1000000;
         printf("O programa demorou %.3f milissegundos\n", delta_us);

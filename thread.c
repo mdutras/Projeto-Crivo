@@ -11,8 +11,8 @@
 void crivo(int inicio, int fim, int num,short* n)
 {
     #pragma omp parallel num_threads(NUM_THREADS)
-    for(int j = 2; num * j <= fim; j++){
-        n[(num * j) - 1] = 0;
+    for(int j = 2; (num + num * j) <= fim; j++){
+        n[( num + num * j) - 1] = 0;
     }
 
 }
