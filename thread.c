@@ -6,25 +6,21 @@
 #include<omp.h>
 #include "tools.h"
 
-#define NUM_ELEMS 10000000
 #define NUM_THREADS 4
 
 void crivo(int inicio, int fim, int num,short* n)
 {
-    // int start = 0;
-    // if(inicio % num == 0){
-    //     start = inicio;
-    // }else{
-    //     start = (inicio + num) - (inicio % num);
-    // }
     #pragma omp parallel num_threads(NUM_THREADS)
-    for(int j = 2; num * j <= NUM_ELEMS; j++){
+    for(int j = 2; num * j <= fim; j++){
         n[(num * j) - 1] = 0;
     }
 
 }
 
 int main(){
+    int NUM_ELEMS;
+    printf("Insira o valor máximo do intervalo: ");
+    scanf("%d", &NUM_ELEMS);
     struct timespec start, end;
     clock_gettime(CLOCK_MONOTONIC_RAW, &start);
     short *nums = (short*) malloc(sizeof(short) * NUM_ELEMS);

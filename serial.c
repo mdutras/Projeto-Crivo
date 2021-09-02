@@ -6,15 +6,13 @@
 #include <sys/time.h>
 #include "tools.h"
 
-#define NUM_ELEMS 100
-
 void crivo(int inicio, int fim, short* n)
 {
     int mult[] = {2, 3, 5,7};
     int counter = 4;
     for(int i = 1; counter > 0; i++){
         for(int j = 0; j < counter; j++){
-            if((mult[j] + i * mult[j]) > NUM_ELEMS){
+            if((mult[j] + i * mult[j]) > fim){
                 counter--;
             }else{
                 if(n[(mult[j] + i * mult[j]) - 1]){
@@ -28,6 +26,9 @@ void crivo(int inicio, int fim, short* n)
 
 int main()
 {
+    int NUM_ELEMS;
+    printf("Insira o valor máximo do intervalo: ");
+    scanf("%d", &NUM_ELEMS);
     struct timespec start, end;
     clock_gettime(CLOCK_MONOTONIC_RAW, &start);
     short *b = (short *) malloc(sizeof(short) * NUM_ELEMS);

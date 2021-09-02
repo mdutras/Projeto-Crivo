@@ -9,7 +9,7 @@
 #define NUM_ELEMS 10000000
 
 int main(int argc, char **argv) 
-{  
+{
     short *b = (short *) malloc(sizeof(short) * NUM_ELEMS);
     for(int i = 0; i < NUM_ELEMS; i++){
         b[i] = 1; 
